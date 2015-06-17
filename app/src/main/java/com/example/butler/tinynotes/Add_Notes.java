@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,6 +30,8 @@ public class Add_Notes extends Activity {
         String dateString = sdf.format(date);
         Date.setText(dateString);
         final EditText title = (EditText) findViewById(R.id.title);
+
+
        final EditText desc = (EditText) findViewById(R.id.desc);
 
 
@@ -40,25 +43,33 @@ public class Add_Notes extends Activity {
 
                 // Add a new student record
                 ContentValues values = new ContentValues();
+                String strUserName = title.getText().toString();
+                String strUserName1 = desc.getText().toString();
+                if (TextUtils.isEmpty(strUserName) || TextUtils.isEmpty(strUserName1)) {
+                    Toast.makeText(getBaseContext(), "You have an empty field", Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
 
-                values.put(DbCreate.TITLE,
-                        ((EditText) findViewById(R.id.title)).getText().toString());
-
-                values.put(DbCreate.DESC,
-                        ((EditText) findViewById(R.id.desc)).getText().toString());
-
-                values.put(DbCreate.DATE,
-                        ((TextView) findViewById(R.id.date)).getText().toString());
+                    values.put(DbCreate.TITLE,
+                            ((EditText) findViewById(R.id.title)).getText().toString());
 
 
-                Uri uri = getContentResolver().insert(
-                        DbCreate.CONTENT_URI, values);
+                    values.put(DbCreate.DESC,
+                            ((EditText) findViewById(R.id.desc)).getText().toString());
 
-                Toast.makeText(getBaseContext(),
-                        "Note Added", Toast.LENGTH_LONG).show();
-                title.setText(null);
-                desc.setText(null);
+                    values.put(DbCreate.DATE,
+                            ((TextView) findViewById(R.id.date)).getText().toString());
 
+
+                    Uri uri = getContentResolver().insert(
+                            DbCreate.CONTENT_URI, values);
+
+                    Toast.makeText(getBaseContext(),
+                            "Note Added", Toast.LENGTH_LONG).show();
+                    title.setText(null);
+                    desc.setText(null);
+
+                }
             }
         });
     }
